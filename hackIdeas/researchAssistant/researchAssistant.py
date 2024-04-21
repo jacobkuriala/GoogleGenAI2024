@@ -38,8 +38,7 @@ def generateContent(prompt, onlyContent = True):
 def generateChatContent(prompt, tools=searchWebTools, tool_config=searchWebConfig):
     global chat
     global chatStep
-    if(chatStep!=0):
-        time.sleep(40)
+    time.sleep(31)
     response = chat.send_message(prompt, tools=tools, tool_config=tool_config)
     print('chat history:')
     for content in chat.history:
@@ -55,7 +54,7 @@ def generateChatContent(prompt, tools=searchWebTools, tool_config=searchWebConfi
         if(part.text):
             print(part.text)
             if(chatStep==0):
-                generateChatContent('Now respond with all the function calls for performing the subtasks.', tool_config=searchWebConfigForceFunction)
+                generateChatContent('Now respond with all the function calls for performing the subtasks. Respond with the report once the subtasks function calls are complete.', tool_config=searchWebConfigForceFunction)
                 chatStep = chatStep + 1
         elif(part.function_call):
             print('Handle function call:')

@@ -1,7 +1,9 @@
 # pip install serpapi
 # pip install python-dotenv
+# pip install beautifulsoup4
 
 import requests
+from bs4 import BeautifulSoup
 import os
 import google.ai.generativelanguage as glm
 from dotenv import load_dotenv
@@ -10,14 +12,26 @@ load_dotenv()
 def searchWeb(searchTerm:str):
     url = f"https://serpapi.com/search.json?q={searchTerm}&api_key={os.getenv('SERP_API_KEY')}"
     response = getUrl(url)
-    data = response.json()
+    data = response.json()['organic_results']
     print(data)
     return data
 
 def getPageContent(url:str):
-    responseContent = getUrl(url).content
-    print(responseContent)
-    return responseContent
+    responseHtml = getUrl(url).content
+    soup = BeautifulSoup(responseHtml, features="html.parser")
+    # kill all script and style elements
+    for script in soup(["script", "style"]):
+        script.extract()    # rip it out
+    # get text
+    text = soup.get_text()
+    # break into lines and remove leading and trailing space on each
+    lines = (line.strip() for line in text.splitlines())
+    # break multi-headlines into a line each
+    chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
+    # drop blank lines
+    text = '\n'.join(chunk for chunk in chunks if chunk)
+    print(text)
+    return text
 
 def getUrl(url):
     return requests.get(url)
@@ -37,7 +51,7 @@ searchWebTools = glm.Tool(
         ),
         glm.FunctionDeclaration(
             name="getPageContent",
-            description="Retrieves the web page content for the input url.",
+            description="Retrieves the web page text for the input url.",
             parameters=glm.Schema(
                 type=glm.Type.OBJECT,
                 properties={
