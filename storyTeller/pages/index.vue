@@ -1,6 +1,6 @@
 <template>
-    <div class="page">
-      <TheExperience />
+    <div>
+      <TheExperience/>
     </div>
 </template>
   
