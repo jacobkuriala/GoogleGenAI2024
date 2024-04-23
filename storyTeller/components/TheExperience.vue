@@ -2,11 +2,12 @@
 import { Scene, PerspectiveCamera, Mesh, SphereGeometry, MeshBasicMaterial, WebGLRenderer } from 'three'
 import { type Ref } from 'vue'
 import { useWindowSize } from '@vueuse/core'
+import BubbleMiniRight from './BubbleMiniRight.vue';
 let showChatBox = ref(false);
 let renderer: WebGLRenderer
 const experience: Ref<HTMLCanvasElement | null> = ref(null)
-
-const { width, height } = useWindowSize()
+const bubbleMiniRight = ref<HTMLDivElement>();
+const { width, height } = useWindowSize();
 const aspectRatio = computed(() => width.value / height.value)
 
 const scene = new Scene()
@@ -20,7 +21,7 @@ function updateCamera() {
   camera.updateProjectionMatrix()
 }
 
-const sphere = new Mesh(
+const mainChar = new Mesh(
   new SphereGeometry(1, 32, 32),
   new MeshBasicMaterial({ color: 0x008080 })
 )
@@ -30,7 +31,7 @@ const sphere2 = new Mesh(
   new MeshBasicMaterial({ color: 0x7a7a7a })
 )
 sphere2.position.set(3, 0, 0)
-scene.add(sphere)
+scene.add(mainChar)
 scene.add(sphere2)
 
 function updateRenderer() {
@@ -50,13 +51,13 @@ function onDocumentKeyDown(event: KeyboardEvent) {
         const ySpeed = 0.1;
 
         const keyCode = event.which;
-        if (sphere) {
+        if (mainChar) {
             if (keyCode == 65) {
-                sphere.position.x -= xSpeed;
+                mainChar.position.x -= xSpeed;
             } else if (keyCode == 68) {
-                sphere.position.x += xSpeed;
+                mainChar.position.x += xSpeed;
             } else if (keyCode == 32) {
-                sphere.position.set(0, 0, 0);
+                mainChar.position.set(0, 0, 0);
             }
         }
         checkCollision();
@@ -64,13 +65,15 @@ function onDocumentKeyDown(event: KeyboardEvent) {
 }
 
 function checkCollision() {
-    if (sphere.position.distanceTo(sphere2.position) < 2) {
+    if (mainChar.position.distanceTo(sphere2.position) < 2) {
         showChatBox.value = true;
+        if (bubbleMiniRight.value) {
+            console.log(bubbleMiniRight.value)
+        }
     } else {
         showChatBox.value = false;
     }
 }
-
 
 watch(aspectRatio, () => {
   updateCamera()
@@ -85,7 +88,10 @@ onMounted(() => {
 </script>
 <template>
     <div style="position: relative; display: inline-block;">
-    <canvas ref="experience"></canvas>
-    <div v-show="showChatBox" style="position: absolute; left: 1em; top: 1em; color: aliceblue;">Chat box goes here</div>
+        <canvas ref="experience"></canvas>
+        <div  v-show="showChatBox">
+            <ChatBox/>
+            <BubbleMiniRight ref="bubbleMiniRight"/>
+        </div>
     </div>
 </template>
