@@ -5,6 +5,7 @@ import { useWindowSize } from '@vueuse/core'
 import BubbleMiniRight from './BubbleMiniRight.vue';
 
 let showChatBox = ref(false);
+let showChatBubble = ref(false);
 let renderer: WebGLRenderer
 const experience: Ref<HTMLCanvasElement | null> = ref(null)
 const bubbleMiniRight = ref<HTMLDivElement | null>(null);
@@ -65,21 +66,28 @@ function onDocumentKeyDown(event: KeyboardEvent) {
               mainChar.position.set(0, 0, 0);
           }
         }
-        checkCollision();
+        checkCollision(event);
         renderer.render(scene, camera);
 }
 
-function checkCollision() {
+function checkCollision(event: KeyboardEvent) {
     if (mainChar.position.distanceTo(sphere2.position) < 2) {
-        showChatBox.value = true;
         if (bubbleMiniRight.value) {
-          updateBubbleMiniRightPosition();
+          updateBubbleMiniRightPosition(event);
         }
     } else {
+        showChatBubble.value = false;
         showChatBox.value = false;
     }
 }
-function updateBubbleMiniRightPosition() {
+
+function checkShowChatBox(event: KeyboardEvent) {
+    if (event.code == 'Enter') {
+        showChatBox.value = true;
+    }
+}
+
+function updateBubbleMiniRightPosition(event: KeyboardEvent) {
   // Step 1: Get the object's position in world space
   const vector = mainChar.position.clone();
   
@@ -110,12 +118,14 @@ function updateBubbleMiniRightPosition() {
     bubbleX.value = vector.x;
     bubbleY.value = vector.y;
   }
+  showChatBubble.value = true;
+  checkShowChatBox(event);
 }
 
 watch(aspectRatio, () => {
   updateCamera()
   updateRenderer()
-  updateBubbleMiniRightPosition()
+  window.addEventListener('keydown', updateBubbleMiniRightPosition, false);
 })
 
 
@@ -131,7 +141,7 @@ onUnmounted(() => {
     <div class="the-experience relative w-full h-full bg-red-500">
         <canvas ref="experience" class="w-full h-full fixed inset-0 z-0"></canvas>
             <ChatBox message="Chat Message Goes Here"  v-show="showChatBox"/>
-            <BubbleMiniRight ref="bubbleMiniRight" message="..." :x="bubbleX" :y="bubbleY"  v-show="showChatBox"/>
+            <BubbleMiniRight ref="bubbleMiniRight" message="..." :x="bubbleX" :y="bubbleY"  v-show="showChatBubble"/>
     </div>
 </template>
 <style scoped>
