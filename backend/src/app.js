@@ -9,6 +9,8 @@ app.use(morgan('dev'))
 app.use(helmet()) // hide crucial information
 app.use(compression()) // compress all responses
 
+// init db
+require('./dbs/init.mongodb')
 // init routes
 app.get('/', (req, res) => {
     return res.status(200).json(
