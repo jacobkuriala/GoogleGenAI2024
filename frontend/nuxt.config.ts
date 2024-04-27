@@ -4,6 +4,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: "Campfire Storyteller AI",
+
       htmlAttrs: {
         lang: "en",
       },
@@ -16,5 +17,11 @@ export default defineNuxtConfig({
       link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
     },
   },
-  modules: ["@nuxtjs/tailwindcss", "@nuxt/image", '@pinia/nuxt'],
+  modules: ["@nuxtjs/tailwindcss", "@nuxt/image", "@pinia/nuxt", "nuxt-icon"],
+  css: ["~/assets/css/fontface.css", "~/assets/css/main.css"],
+  tailwindcss: {
+    cssPath: ["~/assets/css/main.css", { injectPosition: "first" }],
+    configPath: "tailwind.config",
+    editorSupport: true,
+  },
 });

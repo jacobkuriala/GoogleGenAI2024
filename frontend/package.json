@@ -18,7 +18,7 @@
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },
-  "overrides": {
-    "vue": "latest"
+  "devDependencies": {
+    "nuxt-icon": "^0.6.10"
   }
 }
