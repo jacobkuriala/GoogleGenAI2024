@@ -194,6 +194,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+// If you want to limit access to this page to authenticated users only, uncomment the following line
 // definePageMeta({
 //   middleware: "auth",
 // });
