@@ -123,7 +123,7 @@
           class="input-group input__audience flex flex-col items-start gap-3 self-stretch"
         >
           <label for="audience" class="input-label"
-            >What should the word length be?</label
+            >What should the word length be?</label
           >
 
           <div class="audience__range relative mb-6 w-full">
