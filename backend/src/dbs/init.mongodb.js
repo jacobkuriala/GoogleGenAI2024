@@ -1,7 +1,7 @@
 "use strict"
 require('dotenv').config();
-const mongoose = require('mongoose')
-const MONGO_URI = process.env.MONGODB_URI
+const mongoose = require('mongoose');
+const MONGO_URI = process.env.MONGODB_URI;
 
 class Database {
     constructor() {
@@ -9,9 +9,9 @@ class Database {
     }
     _connect(type = 'mongodb') {
         // dev
-        if ( 1 == 1){
+        if (1 == 1) {
             mongoose.set('debug', true)
-            mongoose.set('debug', { color : true})
+            mongoose.set('debug', { color: true })
         }
         mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }).then(_ => {
             console.log('Database connection successful')
