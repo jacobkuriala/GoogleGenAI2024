@@ -52,8 +52,9 @@ const isAuth = require('./middleware/isAuth');
 app.use(isAuth);
 app.get('/generatestory', async (req, res) => {
     console.log(req.query.prompt);
-    const story = await storyTeller.generateStory(req.query.prompt, req.query.audience, req.query.genre);
+    const story = await storyTeller.generateStory(req.query.prompt, req.query.audience, req.query.genre, req.query.wordLength);
     console.log(story);
+    console.log(story.split(' ').length);
     return res.status(200).json({ story });
 });
 
