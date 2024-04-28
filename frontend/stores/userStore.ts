@@ -35,6 +35,32 @@ export const useUserStore = defineStore('user', {
             this.$state.password = data.password
             this.$state.isAuthenticated = true;
         },
+
+        async register(full_name: string, email: string, password: string) {
+            // logica de registro
+            const response = await fetch('http://localhost:3002/api/auth/register', { 
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "full_name": full_name,
+                    "email": email,
+                    "password": password
+                }) 
+            });
+            console.log(response)
+            const data = await response.json();
+            console.log(data)
+
+            // if created successfully, store the token and navigate to login page
+            if (response.status == 200) {
+                return navigateTo('/login');
+            } else {
+                console.log(data.error)
+            }
+        }
+        ,
         logout() {
             // Lógica de logout
             localStorage.removeItem('token')

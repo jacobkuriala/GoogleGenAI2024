@@ -1,8 +1,7 @@
 <template>
-    <form @submit.prevent="loginUser(username, password)">
+    <form @submit.prevent="createUser()">
       <input v-model="username" type="text" placeholder="Username" />
       <input v-model="password" type="password" placeholder="Password" />
-      
       <button type="submit">Login</button>
     </form>
   </template>
@@ -11,13 +10,21 @@
   import { ref } from "vue";
   import { useUserStore } from "../stores/userStore";
   
-  const { login } = useUserStore();
+  const { register } = useUserStore();
+  const fullName = ref("");
   const username = ref("");
   const password = ref("");
-  
-  const loginUser = (username: string, password:string) => {
+  onMounted(() => {
+    console.log("register page mounted");
+    register("Hello Tester", "test2@gmail.com", "test123")
+  });
+  const createUser = async () => {
     // Aquí agregarías la lógica para verificar las credenciales
-    login(username, password);
-  };
+    try{
+      await register(fullName.value, username.value, password.value);
+    } catch (error) {
+      console.log(error);
+    }
+    };
   </script>
   

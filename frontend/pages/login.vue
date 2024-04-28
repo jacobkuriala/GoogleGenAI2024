@@ -24,13 +24,13 @@ onMounted(() => {
 });
 
 const loginUser = async () => {
-        errors.value = null
-        try {
-            await login(email.value, password.value);
-            const token = window.localStorage.getItem('token');
-            if (token) return navigateTo('/login');
-        } catch (error) {
-            console.log(error);
-        }
+    errors.value = null
+    try {
+        await login(email.value, password.value);
+        const token = window.localStorage.getItem('token');
+        if (token) return navigateTo('/login');
+    } catch (error) {
+        console.log(error);
     }
+}
 </script>
