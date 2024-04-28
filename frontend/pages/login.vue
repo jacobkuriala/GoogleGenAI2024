@@ -1,21 +1,36 @@
 <template>
-  <form @submit.prevent="login">
-    <input v-model="username" type="text" placeholder="Username" />
+  <form @submit.prevent="loginUser()">
+    <input v-model="email" type="text" placeholder="Username" />
     <input v-model="password" type="password" placeholder="Password" />
+    
     <button type="submit">Login</button>
   </form>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useUserStore } from "../stores/userStore";
-
 const { login } = useUserStore();
-const username = ref("");
-const password = ref("");
+let email = ref('')
+let password = ref('')
+let errors = ref(null)
 
-const loginUser = () => {
-  // Aquí agregarías la lógica para verificar las credenciales
-  login();
-};
+onMounted(() => {
+  console.log("Login page mounted");
+  // get token from local storage, if authenticated, redirect to dashboard
+  const token = window.localStorage.getItem('token');
+  login("test@gmail.com", "test123") // testing to see if the login function works
+
+  if (token) return navigateTo('/');
+});
+
+const loginUser = async () => {
+        errors.value = null
+        try {
+            await login(email.value, password.value);
+            const token = window.localStorage.getItem('token');
+            if (token) return navigateTo('/login');
+        } catch (error) {
+            console.log(error);
+        }
+    }
 </script>
