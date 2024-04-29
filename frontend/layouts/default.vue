@@ -1,7 +1,7 @@
 <template>
   <div
     id="app"
-    class="layout layout--default h-screen w-screen bg-gradient-to-br from-[#1E293B] to-[#020617] relative"
+    class="layout layout--default min-h-screen w-screen bg-gradient-to-br from-[#1E293B] to-[#020617] relative"
   >
     <TopBar />
     <slot />
@@ -10,9 +10,10 @@
 
 <script setup lang="ts"></script>
 
-<style scoped lang="postcss">
+<style lang="postcss">
 body,
 html {
-  @apply font-work;
+  @apply font-work bg-[#1E293B] bg-[#020617];
 }
+
 </style>
