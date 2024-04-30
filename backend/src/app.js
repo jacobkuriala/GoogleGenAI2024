@@ -46,13 +46,15 @@ app.get('/', (req, res) => {
     );
 });
 
-const isAuth = require('./middleware/isAuth');
+// const isAuth = require('./middleware/isAuth');
 
 // routes below this are restricted 
-app.use(isAuth);
+// app.use(isAuth);
 app.get('/generatestory', async (req, res) => {
-    console.log(req.query.prompt);
-    const story = await storyTeller.generateStory(req.query.prompt, req.query.audience, req.query.genre);
+    const prompt = "Your hardcoded prompt";
+    const audience = "Your hardcoded audience";
+    const genre = "Your hardcoded genre";
+    const story = await storyTeller.generateStory(prompt, audience, genre);
     console.log(story);
     return res.status(200).json({ story });
 });
