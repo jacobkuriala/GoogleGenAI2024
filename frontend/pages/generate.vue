@@ -10,7 +10,7 @@
           :output="output"
           placeholder="Lorem ipsum dolor sit amet consectetur. Nulla vitae scelerisque
          dignissim a..."
-         :loading="isLoading"
+          :loading="isLoading"
         />
         <aside
           class="input col-span-3 row-span-1 flex flex-col items-start gap-4 border bg-gradient-to-br from-[#131B2D] to-[#0A1021] shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)] p-4 pr-1 rounded-xl border-solid border-slate-500/30 max-h-full"
@@ -19,7 +19,7 @@
             class="scroll-container overflow-y-auto flex flex-col items-start gap-4 h-full w-full pr-3"
           >
             <div
-              class="input-group w-full input__text-prompt flex flex-col items-start gap-3 "
+              class="input-group w-full input__text-prompt flex flex-col items-start gap-3"
             >
               <label for="text-prompt" class="input-label"
                 >Create a story from text prompt</label
@@ -31,7 +31,7 @@
                 placeholder="Enter your text prompt"
               ></textarea>
               <div
-                class="text-prompt__actions flex flex-wrap justify-center items-end gap-2 self-stretch  w-full"
+                class="text-prompt__actions flex flex-wrap justify-center items-end gap-2 self-stretch w-full"
               >
                 <button
                   class="btn icon-btn flex justify-center items-center gap-2 self-stretch border px-4 rounded-full border-solid border-corporate-500 hover:bg-corporate-500/20 transition-colors duration-150"
@@ -46,13 +46,32 @@
                   class="btn icon-btn flex justify-center items-center flex-[1_0_0] px-4 py-1 gap-2 self-stretch border rounded-full border-solid border-corporate-500 bg-corporate-500 text-black hover:border-corporate-500/80 hover:bg-corporate-500/80 transition-colors duration-150 text-base font-normal"
                   @click="generateTextOutput"
                 >
-                  Generate
+                  <span v-if="!isLoading">Generate</span>
+                  <div role="status" v-else>
+                    <svg
+                      aria-hidden="true"
+                      class="w-14 h-4 text-slate-800 animate-spin fill-corporate-500"
+                      viewBox="0 0 100 101"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                        fill="currentColor"
+                      />
+                      <path
+                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                        fill="currentFill"
+                      />
+                    </svg>
+                    <span class="sr-only">Loading...</span>
+                  </div>
                 </button>
               </div>
             </div>
             <!-- Genre -->
             <div
-              class="input-group input__genre  w-full flex flex-col items-start gap-3 self-stretch"
+              class="input-group input__genre w-full flex flex-col items-start gap-3 self-stretch"
             >
               <label for="genre" class="input-label">Choose a genre</label>
               <div
@@ -87,7 +106,7 @@
             </div>
             <!-- Audience -->
             <div
-              class="input-group input__audience  w-full flex flex-col items-start gap-3 self-stretch"
+              class="input-group input__audience w-full flex flex-col items-start gap-3 self-stretch"
             >
               <label for="audience" class="input-label"
                 >Choose a target audience</label
@@ -184,7 +203,7 @@
             </div>
             <!-- Submit Button -->
             <div
-              class="input-group input__submit  w-full flex flex-col justify-end items-center gap-2 self-stretch flex-[1_0_0]"
+              class="input-group input__submit w-full flex flex-col justify-end items-center gap-2 self-stretch flex-[1_0_0]"
             >
               <button
                 class="btn flex h-10 justify-center items-center gap-2 self-stretch bg-slate-400 hover:bg-slate-400/80 trasition-colors duration-150 px-10 py-1.5 rounded-lg"
@@ -217,14 +236,14 @@ const output = ref<string | undefined | null>("");
 // Uses computed to keep the value in sync with the store
 const inputPrompt = computed({
   get: () => mainStore.getStoryPrompt,
-  set: (value) => mainStore.setStoryPrompt(value)
+  set: (value) => mainStore.setStoryPrompt(value),
 });
 
 //Text promt
 const variateTextOutput = () => {
   console.log("Variate Text Output");
 };
-const generateTextOutput = async() => {
+const generateTextOutput = async () => {
   if (inputPrompt.value && selectedGenre.value && selectedAudience.value) {
     await createStory({
       prompt: inputPrompt.value,
@@ -245,7 +264,9 @@ const genres = ref([
   { text: "Romance", color: "bg-pink-400/80" },
   { text: "Thriller", color: "bg-yellow-400/80" },
 ]);
-const selectedGenre = ref<{ text: string; color: string } | null>(genres.value[0]);
+const selectedGenre = ref<{ text: string; color: string } | null>(
+  genres.value[0]
+);
 const customGenreText = ref(""); // Nueva referencia para el texto del input
 const isCustomGenre = ref(false);
 
@@ -274,7 +295,9 @@ const audiences = ref([
   { text: "Elders", color: "bg-pink-400/80" },
   { text: "All", color: "bg-yellow-400/80" },
 ]);
-const selectedAudience = ref<{ text: string; color: string } | null>(audiences.value[0]);
+const selectedAudience = ref<{ text: string; color: string } | null>(
+  audiences.value[0]
+);
 const customAudienceText = ref(""); // Nueva referencia para el texto del input
 const isCustomAudience = ref(false);
 
