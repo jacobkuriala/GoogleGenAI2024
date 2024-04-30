@@ -9,7 +9,8 @@
         <GeminiOutput
           :output="output"
           placeholder="Lorem ipsum dolor sit amet consectetur. Nulla vitae scelerisque
-        dignissim a..."
+         dignissim a..."
+         :loading="isLoading"
         />
         <aside
           class="input col-span-3 row-span-1 flex flex-col items-start gap-4 border bg-gradient-to-br from-[#131B2D] to-[#0A1021] shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)] p-4 pr-1 rounded-xl border-solid border-slate-500/30 max-h-full"
@@ -209,12 +210,11 @@ const mainStore = useMainStore();
 // If you want to limit access to this page to authenticated users only, uncomment the following line
 definePageMeta({
   middleware: ["auth"],
-  // or middleware: 'auth'
 });
 const output = ref<string | undefined | null>("");
 // const inputPrompt = ref<string | undefined | null>("");
 
-// Utiliza computed para mantener el valor sincronizado con el store
+// Uses computed to keep the value in sync with the store
 const inputPrompt = computed({
   get: () => mainStore.getStoryPrompt,
   set: (value) => mainStore.setStoryPrompt(value)
