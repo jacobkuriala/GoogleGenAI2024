@@ -59,7 +59,7 @@ export const useUserStore = defineStore("user", {
 
       // if created successfully, store the token and navigate to login page
       if (response.status == 200) {
-        return navigateTo("/login");
+        return window.location.href = "/login";
       } else {
         console.log(data.error);
       }
