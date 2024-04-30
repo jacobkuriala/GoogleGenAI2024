@@ -3,7 +3,8 @@ const userModel = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 
 exports.postRegister = async (req, res, next) => {
-    const { fullname, email, password } = req.body;
+    console.log('in post register', req.body);
+    const { full_name, email, password } = req.body;
     console.log(req.body);
     try {
         const exsitUser = await userModel.findOne({ email: email });
@@ -20,7 +21,7 @@ exports.postRegister = async (req, res, next) => {
 
         const hashedPassword = await bcrypt.hash(password, 12);
         const user = new userModel({
-            fullname: fullname,
+            full_name: full_name,
             email: email,
             password: hashedPassword,
         });
@@ -43,7 +44,7 @@ exports.postLogin = async (req, res, next) => {
 
     try {
         const user = await userModel.findOne({ email: email });
-
+        
         if (!user) {
             const error = new Error("user with this email not found!");
             error.statusCode = 401;
@@ -57,10 +58,11 @@ exports.postLogin = async (req, res, next) => {
             error.statusCode = 401;
             throw error;
         }
+        loadedUser = user;
         const token = jwt.sign({ email: loadedUser.email }, "expressnuxtsecret", {
             expiresIn: "20m", // it will expire token after 20 minutes and if the user then refresh the page will log out
         });
-        res.status(200).json({ token: token });
+        res.status(200).json({ token: token, full_name: loadedUser.full_name  });
     } catch (err) {
         if (!err.statusCode) {
             err.statusCode = 500;
@@ -76,7 +78,7 @@ exports.getUser = async (req, res, next) => { // this function will send user da
     res.status(200).json({
         user: {
             id: user._id,
-            fullname: user.fullname,
+            full_name: user.full_name,
             email: user.email,
         },
     });

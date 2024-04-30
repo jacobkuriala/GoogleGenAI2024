@@ -78,7 +78,7 @@ onMounted(() => {
   console.log("Login page mounted");
   // get token from local storage, if authenticated, redirect to dashboard
   const token = window.localStorage.getItem("token");
-  login("test@gmail.com", "test123"); // testing to see if the login function works
+  // login("test@gmail.com", "test123"); // testing to see if the login function works
 
   if (token) return navigateTo("/");
 });
@@ -88,7 +88,7 @@ const loginUser = async () => {
   try {
     await login(email.value, password.value);
     const token = window.localStorage.getItem("token");
-    if (token) return navigateTo("/login");
+    if (token) return navigateTo("/generate");
   } catch (error: any) {
     console.log(error);
     message.value = error.message;

@@ -25,7 +25,7 @@
             id="fullName"
             class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-corporate-500 focus:border-corporate-500 block w-full p-2.5"
             placeholder="John Doe"
-            v-model="fullName"
+            v-model="full_name"
             :required="true"
           />
         </div>
@@ -123,7 +123,7 @@ import { ref, onMounted } from "vue";
 import { useUserStore } from "../stores/userStore";
 
 const { register } = useUserStore();
-const fullName = ref("");
+const full_name = ref("");
 const username = ref("");
 const password = ref("");
 const confirmPassword = ref("");
@@ -140,7 +140,7 @@ const createUser = async () => {
     return;
   }
   try {
-    await register(fullName.value, username.value, password.value);
+    await register(full_name.value, username.value, password.value);
     message.value = "User created successfully";
     color.value = "success";
   } catch (error) {
