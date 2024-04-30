@@ -1,6 +1,6 @@
 <template>
   <div
-    class="page-register flex flex-col justify-center items-center gap-4 w-full h-full"
+    class="page-register flex flex-col justify-center items-center gap-4 w-full h-screen"
   >
     <h1
       class="text-xl font-bold leading-tight tracking-tight text-white md:text-2xl"
