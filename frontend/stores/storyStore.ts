@@ -1,13 +1,17 @@
 import { defineStore } from "pinia";
 
-export const useStoryStore = defineStore("store", {
+export const useStoryStore = defineStore("story", {
   state: () => ({
+    persona: "You are an award-winning science fiction author with a penchant for expansive, intricately woven stories. Your ultimate goal is to write the next award winning adventure story." as string,
     premise: null as string | null,
     outline: null as string | null,
     draft: null as string | null,
     finalStory: null as string | null,
   }),
   actions: {
+    setPersona(persona: string) {
+        this.persona = persona;
+      },
     setPremise(premise: string) {
       this.premise = premise;
     },
@@ -21,13 +25,15 @@ export const useStoryStore = defineStore("store", {
       this.finalStory = finalStory;
     },
     resetStory() {
-      this.premise = null;
-      this.outline = null;
-      this.draft = null;
-      this.finalStory = null;
-    },
+        this.persona = "You are an award-winning science fiction author with a penchant for expansive, intricately woven stories. Your ultimate goal is to write the next award winning adventure story.";
+        this.premise = null;
+        this.outline = null;
+        this.draft = null;
+        this.finalStory = null;
+      }
   },
   getters: {
+    getPersona: (state) => state.persona,
     getPremise: (state) => state.premise,
     getOutline: (state) => state.outline,
     getDraft: (state) => state.draft,
@@ -38,11 +44,12 @@ export const useStoryStore = defineStore("store", {
     hasFinalStory: (state) => state.finalStory !== null,
     isStoryComplete: (state) =>
       state.finalStory !== null && state.finalStory.includes("IAMDONE"),
-    fullStoryState: (state) => ({
-      premise: state.premise,
-      outline: state.outline,
-      draft: state.draft,
-      finalStory: state.finalStory,
-    }),
+      fullStoryState: (state) => ({
+        persona: state.persona,
+        premise: state.premise,
+        outline: state.outline,
+        draft: state.draft,
+        finalStory: state.finalStory
+      })
   },
 });
