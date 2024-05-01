@@ -4,12 +4,14 @@ const bodyParser = require('body-parser');
 const { default: helmet } = require('helmet');
 const morgan = require('morgan');
 const storyTeller = require('./storyTeller');
+const cors = require('cors');
 const app = express();
 
 // init middleware
 app.use(morgan('dev'));
 app.use(helmet()); // hide crucial information
 app.use(compression()); // compress all responses
+app.use(cors({ origin: 'http://localhost:3000' }));
 
 // set up authentication  routes
 const authRouter = require("./routes/authRouter");
@@ -56,5 +58,13 @@ app.get('/generatestory', async (req, res) => {
     console.log(story);
     return res.status(200).json({ story });
 });
+
+app.post('/generatestorypost', async (req, res) => {
+    console.log(req.body);
+    const story = await storyTeller.generatestorywithparams(req.body.prompt, req.body.audience, req.body.genre);
+    console.log(story);
+    return res.status(200).json({ story });
+});
+
 
 module.exports = app;
