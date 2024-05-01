@@ -1,6 +1,6 @@
 <template>
   <main
-    class="generate-output flex col-span-9 h-full overflow-hidden justify-center items-center gap-2 border bg-black shadow-custom p-4 rounded-xl border-solid border-slate-500/30"
+    class="generate-output flex  h-full overflow-hidden justify-center items-center gap-2 border bg-black shadow-custom p-4 rounded-xl border-solid border-slate-500/30"
   >
     <div
       class="output-placeholder flex flex-col items-center justify-center w-full h-full gap-12"
