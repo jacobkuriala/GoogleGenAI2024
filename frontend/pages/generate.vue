@@ -244,16 +244,22 @@ const variateTextOutput = () => {
   console.log("Variate Text Output");
 };
 const generateTextOutput = async () => {
-  if (inputPrompt.value && selectedGenre.value && selectedAudience.value) {
-    await createStory({
-      prompt: inputPrompt.value,
-      audience: selectedAudience.value.text,
-      genre: selectedGenre.value.text,
-    });
-    output.value = story.value;
-  } else {
-    console.error("All fields are required");
-  }
+  await fetch('http://localhost:3002/generatestorypost', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        prompt: inputPrompt.value,
+        audience: selectedAudience.value,
+        genre: selectedGenre.value,
+    }),
+  })
+  .then(response => response.json())
+  .then(data => output.value = data.story)
+  .catch((error) => {
+    console.error('Error:', error);
+  });
 };
 
 //Genres
