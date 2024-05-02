@@ -42,7 +42,7 @@ async function generateOutline(authorPrompt, premisePrompt, debug = false) {
     Write an outline for the plot of your story.`;
 
     const result = await api.generateContent(combinedPrompt);
-    return { combinedPrompt: result.response.candidates[0].content.parts[0].text, guidelinePrompt: defaultGuideline };
+    return result.response.candidates[0].content.parts[0].text;
 }
 
 async function generateStory(authorPrompt, premisePrompt, outlinePrompt, guidelinePrompt = defaultGuideline, storySoFar = '', debug = false) {
