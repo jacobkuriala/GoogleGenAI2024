@@ -10,7 +10,7 @@
           :output="output"
           placeholder="Lorem ipsum dolor sit amet consectetur. Nulla vitae scelerisque
          dignissim a..."
-          :loading="outputIsLoading"
+          :loading="isOutputLoading"
           class="col-span-7"
         />
         <aside
@@ -144,7 +144,7 @@
                     class="text-area"
                     placeholder="Choose a genre and an audience and click 'Generate Author'"
                     v-model="author"
-                    :disabled="isLoading"
+                    :disabled="isLoading || isOutputLoading"
                   ></textarea>
                 </div>
               </div>
@@ -191,7 +191,7 @@
                   class="text-area"
                   placeholder="Premise Placeholder"
                   v-model="premise"
-                  :disabled="isLoading"
+                  :disabled="isLoading || isOutputLoading"
                 ></textarea>
               </div>
               <div
@@ -292,7 +292,7 @@
                   class="text-area"
                   placeholder="Outline Placeholder"
                   v-model="outline"
-                  :disabled="isLoading"
+                  :disabled="isLoading || isOutputLoading"
                 ></textarea>
               </div>
               <div
@@ -411,7 +411,7 @@
                         class="text-area"
                         placeholder="Final Story Placeholder"
                         v-model="finalStory"
-                        :disabled="isLoading"
+                        :disabled="isLoading || isOutputLoading"
                       ></textarea>
                       <button
                         class="flex h-10 justify-center items-center gap-2 absolute bg-corporate-500 px-6 py-1.5 rounded-full right-3 bottom-4"
@@ -434,7 +434,7 @@
                         class="text-area"
                         placeholder="Choose a genre and an audience and click 'Generate Author'"
                         v-model="guidelines"
-                        :disabled="isLoading"
+                        :disabled="isLoading || isOutputLoading"
                       ></textarea>
                     </div>
                   </TabPanel>
@@ -528,12 +528,18 @@
 import { ref } from "vue";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 
+const { fetchAuthor, fetchPremise, fetchOutline, fetchFinalStory } =
+  useStoryApi();
+
 const mainStore = useMainStore();
 const storyStore = useStoryStore();
 const isLoggedIn = ref(true);
-const outputIsLoading = ref(false);
+const isOutputLoading = ref(false);
 const isLoading = ref(false);
 const output = ref("");
+
+//api debug
+const debug = ref(false);
 // If you want to limit access to this page to authenticated users only, uncomment the following line
 // definePageMeta({
 //   middleware: ["auth"],
@@ -587,37 +593,6 @@ const backStep = () => {
 /**
  * Step 0: Author
  */
-const author = ref(storyStore.author || "");
-
-const generateAuthor = () => {
-  isLoading.value = true;
-  setTimeout(() => {
-    // Here implement the logic to generate the author via AI
-    console.log("Author generated");
-    isLoading.value = false;
-  }, 2000);
-};
-const regenerateAuthor = () => {
-  isLoading.value = true;
-  setTimeout(() => {
-    console.log("Author regenerated");
-    isLoading.value = false;
-  }, 2000);
-};
-const setAuthor = (text: string) => {
-  storyStore.setAuthor(text);
-  output.value =
-    '<h2 class="step-label ">Step 0: Author</h2>' +
-    "<div>" +
-    text +
-    "</div>" +
-    '<span class="spacer"></span>';
-  outputIsLoading.value = true;
-  nextStep();
-  setTimeout(() => {
-    outputIsLoading.value = false;
-  }, 2000);
-};
 
 //Genres
 const genres = ref([
@@ -684,12 +659,49 @@ const addCustomAudience = () => {
   isCustomAudience.value = false;
 };
 
+const author = ref(storyStore.author || "");
+
+const generateAuthor = async () => {
+  isLoading.value = true;
+  author.value = await fetchAuthor(
+    selectedGenre.value?.text || "",
+    selectedAudience.value?.text || ""
+  );
+  // Here implement the logic to generate the author via AI
+  console.log("Author generated", author.value);
+  isLoading.value = false;
+};
+
+const regenerateAuthor = async () => {
+  isLoading.value = true;
+  author.value = await fetchAuthor(
+    selectedGenre.value?.text || "",
+    selectedAudience.value?.text || ""
+  );
+  console.log("Author regenerated", author.value);
+  isLoading.value = false;
+};
+const setAuthor = (text: string) => {
+  storyStore.setAuthor(text);
+  output.value =
+    '<h2 class="step-label ">Step 0: Author</h2>' +
+    "<div>" +
+    text +
+    "</div>" +
+    '<span class="spacer"></span>';
+  isOutputLoading.value = true;
+  handleGeneratePremise();
+  nextStep();
+  setTimeout(() => {
+    isOutputLoading.value = false;
+  }, 2000);
+};
+
 /**
  * Step 1: Premise
  */
 const premise = ref(storyStore.premise || "");
 const setPremise = (text: string) => {
-  storyStore.setPremise(text);
   output.value =
     '<h2 class="step-label ">Step 0: Author</h2>' +
     "<div>" +
@@ -701,18 +713,20 @@ const setPremise = (text: string) => {
     text +
     "</div>" +
     '<span class="spacer"></span>';
-  outputIsLoading.value = true;
+  handleGenerateOutline();
+  isOutputLoading.value = true;
   nextStep();
   setTimeout(() => {
-    outputIsLoading.value = false;
+    isOutputLoading.value = false;
   }, 2000);
 };
-const regeneratePremise = () => {
+const handleGeneratePremise = async () => {
+  premise.value = await fetchPremise(storyStore.author, debug.value);
+};
+const regeneratePremise = async () => {
   isLoading.value = true;
-  setTimeout(() => {
-    console.log("Premise regenerated");
-    isLoading.value = false;
-  }, 2000);
+  premise.value = await fetchPremise(storyStore.author, debug.value);
+  isLoading.value = false;
 };
 
 /**
@@ -720,7 +734,6 @@ const regeneratePremise = () => {
  */
 const outline = ref(storyStore.outline || "");
 const setOutline = (text: string) => {
-  outputIsLoading.value = true;
   output.value =
     '<h2 class="step-label ">Step 0: Author</h2>' +
     "<div>" +
@@ -738,17 +751,29 @@ const setOutline = (text: string) => {
     "</div>" +
     '<span class="spacer"></span>';
   storyStore.setOutline(text);
+  isOutputLoading.value = true;
+  handleGenerateFinalStory();
   nextStep();
   setTimeout(() => {
-    outputIsLoading.value = false;
+    isOutputLoading.value = false;
   }, 2000);
 };
-const regenerateOutline = () => {
+
+const handleGenerateOutline = async () => {
+  premise.value = await fetchOutline(
+    storyStore.author,
+    storyStore.premise,
+    debug.value
+  );
+};
+const regenerateOutline = async () => {
   isLoading.value = true;
-  setTimeout(() => {
-    console.log("Outline regenerated");
-    isLoading.value = false;
-  }, 2000);
+  outline.value = await fetchOutline(
+    storyStore.author,
+    storyStore.premise,
+    debug.value
+  );
+  isLoading.value = false;
 };
 
 /**
@@ -762,10 +787,30 @@ const finalStory = ref(storyStore.finalStory || "");
 const guidelines = ref("");
 const regenerateStory = () => {
   isLoading.value = true;
-  setTimeout(() => {
-    console.log("Story regenerated");
-    isLoading.value = false;
-  }, 2000);
+  // finalStory.value = await fetchFinalStory(
+  //   storyStore.author,
+  //   storyStore.premise,
+  //   debug.value
+  // );
+  isLoading.value = false;
+};
+//Dont know how to implement this
+const handleGenerateFinalStory = async () => {
+  console.log("Generating final story");
+  // finalStory.value = await fetchFinalStory(
+  //   storyStore.author,
+  //   storyStore.premise,
+  //   debug.value
+  // );
+};
+const regenerateFinalStory = async () => {
+  isLoading.value = true;
+  // finalStory.value = await fetchFinalStory(
+  //   storyStore.author,
+  //   storyStore.premise,
+  //   debug.value
+  // );
+  isLoading.value = false;
 };
 const setFinalStory = (text: string) => {
   storyStore.setFinalStory(text);
@@ -789,20 +834,17 @@ const setFinalStory = (text: string) => {
     "<div>" +
     text +
     "</div>";
-  outputIsLoading.value = true;
+  isOutputLoading.value = true;
   finishStep();
   setTimeout(() => {
-    outputIsLoading.value = false;
+    isOutputLoading.value = false;
   }, 2000);
 };
+
 const finishStep = () => {
   // Here implement the logic to finish the story
   console.log("Story finished");
 };
-
-watch(output.value, (newValue, oldValue) => {
-  console.log("Output ha cambiado de:", oldValue, "a:", newValue);
-});
 </script>
 
 <style lang="postcss" scoped>

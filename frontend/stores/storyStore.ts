@@ -4,9 +4,10 @@ export const useStoryStore = defineStore("story", {
   state: () => ({
     author:
       "You are an award-winning science fiction author with a penchant for expansive, intricately woven stories. Your ultimate goal is to write the next award winning adventure story." as string,
-    premise: null as string | null,
-    outline: null as string | null,
-    finalStory: null as string | null,
+    premise: '' as string,
+    outline: '' as string,
+    finalStory: '' as string,
+    guidelines: '' as string,
   }),
   actions: {
     setAuthor(author: string) {
@@ -21,12 +22,16 @@ export const useStoryStore = defineStore("story", {
     setFinalStory(finalStory: string) {
       this.finalStory = finalStory;
     },
+    setGuidelines(guidelines: string) {
+      this.guidelines = guidelines;
+    },
     resetStory() {
       this.author =
         "You are an award-winning science fiction author with a penchant for expansive, intricately woven stories. Your ultimate goal is to write the next award winning adventure story.";
-      this.premise = null;
-      this.outline = null;
-      this.finalStory = null;
+      this.premise = '';
+      this.outline = '';
+      this.finalStory = '';
+      this.guidelines = '';
     },
   },
   getters: {
@@ -34,16 +39,19 @@ export const useStoryStore = defineStore("story", {
     getPremise: (state) => state.premise,
     getOutline: (state) => state.outline,
     getFinalStory: (state) => state.finalStory,
-    hasPremise: (state) => state.premise !== null,
-    hasOutline: (state) => state.outline !== null,
-    hasFinalStory: (state) => state.finalStory !== null,
+    getGuidelines: (state) => state.guidelines,
+    hasPremise: (state) => state.premise !== '',
+    hasOutline: (state) => state.outline !== '',
+    hasFinalStory: (state) => state.finalStory !== '',
+    hasGuidelines: (state) => state.guidelines !== '',
     isStoryComplete: (state) =>
-      state.finalStory !== null && state.finalStory.includes("IAMDONE"),
+      state.finalStory !== '' && state.finalStory.includes("IAMDONE"),
     fullStoryState: (state) => ({
       author: state.author,
       premise: state.premise,
       outline: state.outline,
       finalStory: state.finalStory,
+      guidelines: state.guidelines,
     }),
   },
 });
