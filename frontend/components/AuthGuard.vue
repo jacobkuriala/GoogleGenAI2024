@@ -1,10 +1,10 @@
 <template>
-  <div v-if="userStore.isAuthenticated">
+  <div v-if="isLoggedIn">
     <slot></slot>
     <!-- Contenido de la página -->
   </div>
   <div class="flex items-center justify-center h-screen w-full" v-else>
-    <div role="status" >
+    <div role="status">
       <svg
         aria-hidden="true"
         class="w-8 h-8 text-gray-600 animate-spin fill-corporate-500"
@@ -26,8 +26,8 @@
   </div>
 </template>
 
-<script setup>
-import { useUserStore } from "@/stores/userStore";
-
-const userStore = useUserStore();
+<script setup lang="ts">
+const props = defineProps<{
+  isLoggedIn?: boolean;
+}>();
 </script>

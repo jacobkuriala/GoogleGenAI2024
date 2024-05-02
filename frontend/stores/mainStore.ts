@@ -14,7 +14,6 @@ export const useMainStore = defineStore("main", {
     },
   },
   getters: {
-    isAppLoaded: (state) => state.isAppLoaded, // Usa una función que retorna el estado
-    getStoryPrompt: (state) => state.storyPrompt,
+    getAppLoaded: (state) => state.isAppLoaded, // Usa una función que retorna el estado
   },
 });

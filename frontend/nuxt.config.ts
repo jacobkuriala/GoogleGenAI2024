@@ -18,13 +18,12 @@ export default defineNuxtConfig({
       link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
     },
   },
-  modules: [
-    "@nuxtjs/tailwindcss",
-    "@nuxt/image",
-    "@pinia/nuxt",
-    "nuxt-icon",
-    "@pinia-plugin-persistedstate/nuxt",
-  ],
+  build: {
+    transpile: ["@headlessui/vue"],
+  },
+  modules: ["@nuxtjs/tailwindcss", "@nuxt/image", "@pinia/nuxt", "nuxt-icon"],
+
+  
   css: ["~/assets/css/fontface.css", "~/assets/css/main.css"],
   tailwindcss: {
     cssPath: ["~/assets/css/main.css", { injectPosition: "first" }],
