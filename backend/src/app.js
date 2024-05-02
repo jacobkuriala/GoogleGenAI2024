@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const { default: helmet } = require('helmet');
 const morgan = require('morgan');
 const storyTeller = require('./storyTeller');
+const storyTeller2 = require('./storyTeller2');
 const app = express();
 
 // init middleware
@@ -56,6 +57,39 @@ app.get('/generatestory', async (req, res) => {
     const genre = "Your hardcoded genre";
     const story = await storyTeller.generateStory(prompt, audience, genre);
     console.log(story);
+    return res.status(200).json({ story });
+});
+
+app.post('/generateauthor', async (req, res) => {
+    console.log('in generate audience');
+    const authorPrompt = storyTeller2.generateAuthor(req.body.genre, req.body.audience);
+    return res.status(200).json({ authorPrompt });
+});
+
+app.post('/generatepremise', async (req, res) => {
+    const premisePrompt = await storyTeller2.generatePremise(req.body.authorPrompt, req.body.debug);
+    return res.status(200).json({ premisePrompt });
+});
+
+app.post('/generateoutline', async (req, res) => {
+    const outlinePrompt = await storyTeller2.generateOutline(
+        req.body.authorPrompt,
+        req.body.premisePrompt,
+        req.body.debug);
+    return res.status(200).json({ outlinePrompt });
+});
+
+// creates new story if storySoFar = '' or not provided
+// if guidelinePrompt is not provided it uses a default guideline prompt
+app.post('/generatestory2', async (req, res) => {
+    console.log('in generate premise');
+    const story = await storyTeller2.generateStory(
+        req.body.authorPrompt,
+        req.body.premisePrompt,
+        req.body.outlinePrompt,
+        req.body.guidelinePrompt,
+        req.body.storySoFar,
+        req.body.debug);
     return res.status(200).json({ story });
 });
 
