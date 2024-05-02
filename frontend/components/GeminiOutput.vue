@@ -1,6 +1,6 @@
 <template>
   <main
-    class="generate-output flex  h-full overflow-hidden justify-center items-center gap-2 border bg-black shadow-custom p-4 rounded-xl border-solid border-slate-500/30"
+    class="generate-output flex  h-full overflow-hidden justify-center items-center gap-2 border bg-black shadow-custom p-4 rounded-xl border-solid border-slate-500/30 relative"
   >
     <div
       class="output-placeholder flex flex-col items-center justify-center w-full h-full gap-12"
@@ -16,7 +16,7 @@
       </p>
     </div>
     <div
-      class="loader w-full h-full flex justify-center items-center"
+      class="loader w-full h-full flex justify-center items-center absolute top-0 left-0 bg-black bg-opacity-50 z-50"
       v-if="loading"
     >
       <div role="status">
