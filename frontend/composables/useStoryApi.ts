@@ -52,14 +52,14 @@ export const useStoryApi = () => {
     }
   };
 
-  const fetchFinalStory = async (authorPrompt: string, premisePrompt: string, outlinePrompt: string, guidelinePrompt: string, storySoFar: string, debug: boolean) => {
+  const fetchFinalStory = async (authorPrompt: string, premisePrompt: string, outlinePrompt: string, guidelinePrompt: string, storySoFar: string, endingStory: boolean, debug: boolean) => {
     try {
       const response = await fetch(`http://localhost:3002/generatestory2`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ authorPrompt, premisePrompt, outlinePrompt, guidelinePrompt, storySoFar, debug }),
+        body: JSON.stringify({ authorPrompt, premisePrompt, outlinePrompt, guidelinePrompt, storySoFar, endingStory, debug }),
       });
       const data = await response.json();
       return data.story; // Devuelve el valor en lugar de asignarlo
