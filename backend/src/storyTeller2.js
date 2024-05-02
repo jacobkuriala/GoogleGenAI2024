@@ -124,8 +124,7 @@ next part of your outline you should write.
 
 Your task is to continue where you left off and write the ending of the story.
 Your writing should be detailed enough that you are only scratching the surface of the next part of
-your outline. Try to write AT MINIMUM 1000 WORDS. However, once the story
-is COMPLETELY finished, write IAMDONE. Print the name of the chapter when a new chapter begins.
+your outline. Try to write AT MINIMUM 1000 WORDS. Print the name of the chapter when a new chapter begins.
 Remember, do NOT write a whole chapter right now.
 
 If the story is becoming too long, feel free to summarize the events to reach a satisfying conclusion.

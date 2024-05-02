@@ -19,7 +19,6 @@ export const useStoryApi = () => {
   };
 
   const fetchPremise = async (authorPrompt: string, debug: boolean) => {
-    console.log('fetchPremise', authorPrompt, debug)
     try {
       const response = await fetch(`http://localhost:3002/generatepremise`, {
         method: 'POST',
@@ -53,14 +52,31 @@ export const useStoryApi = () => {
     }
   };
 
-  const fetchFinalStory = async (authorPrompt: string, premisePrompt: string, outlinePrompt: string, guidelinePrompt: string, storySoFar: string, endingStory: boolean, debug: boolean) => {
+  const fetchStory = async (authorPrompt: string, premisePrompt: string, outlinePrompt: string, guidelinePrompt: string, storySoFar: string, debug: boolean) => {
     try {
       const response = await fetch(`http://localhost:3002/generatestory2`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ authorPrompt, premisePrompt, outlinePrompt, guidelinePrompt, storySoFar, endingStory, debug }),
+        body: JSON.stringify({ authorPrompt, premisePrompt, outlinePrompt, guidelinePrompt, storySoFar, debug }),
+      });
+      const data = await response.json();
+      return data.story; // Devuelve el valor en lugar de asignarlo
+    } catch (error) {
+      console.error('Error fetching story:', error);
+      return null; // Devuelve null en caso de error
+    }
+  };
+
+  const fetchEnding = async (authorPrompt: string, premisePrompt: string, outlinePrompt: string, guidelinePrompt: string, storySoFar: string, debug: boolean) => {
+    try {
+      const response = await fetch(`http://localhost:3002/generateendingstory`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ authorPrompt, premisePrompt, outlinePrompt, guidelinePrompt, storySoFar, debug }),
       });
       const data = await response.json();
       return data.story; // Devuelve el valor en lugar de asignarlo
@@ -70,5 +86,5 @@ export const useStoryApi = () => {
     }
   };
 
-  return { fetchAuthor, fetchPremise, fetchOutline, fetchFinalStory };
+  return { fetchAuthor, fetchPremise, fetchOutline, fetchStory, fetchEnding };
 };

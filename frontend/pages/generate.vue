@@ -414,7 +414,7 @@
                         id="text-prompt"
                         class="text-area"
                         placeholder="Final Story Placeholder"
-                        v-model="storySoFar"
+                        v-model="finalStory"
                         :disabled="isLoading || isOutputLoading"
                       ></textarea>
                       <button
@@ -512,13 +512,40 @@
                     <span class="sr-only">Loading...</span>
                   </div>
                 </button>
-                <button type="button" class="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 flex h-10 justify-center items-center gap-2 border border-solid px-10 py-1.5 rounded-full">
+                <button 
+                type="button" class="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 flex h-10 justify-center items-center gap-2 border border-solid px-10 py-1.5 rounded-full"
+                @click="regenerateEnding">
                   <Icon
                     name="heroicons:arrow-path-rounded-square-solid"
                     class="w-6 h-6 text-corporate-500"
                     v-if="!isLoading"
                   />
-                  GENERATE ENDING
+                  <span
+                    class="text-corporate-400 text-xl font-normal uppercase"
+                    v-if="!isLoading"
+                  >
+                    Regenerate Ending</span
+                  >
+                  <div role="status" v-else>
+                    <svg
+                      aria-hidden="true"
+                      class="w-14 h-4 text-slate-800 animate-spin fill-corporate-500"
+                      viewBox="0 0 100 101"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                        fill="currentColor"
+                      />
+                      <path
+                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                        fill="currentFill"
+                      />
+                    </svg>
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  
                 </button>
               </div>
             </main>
@@ -547,7 +574,7 @@
                   </button>
                   <button
                     class="btn flex h-14 justify-center items-center gap-2 flex-[1_0_0] bg-corporate-500 hover:bg-corporate-500/80 px-4 py-1.5 rounded-full"
-                    @click="setFinalStory(storySoFar)"
+                    @click="finishStory"
                   >
                     <div class="flex flex-col justify-center items-center">
                       <span
@@ -623,7 +650,7 @@
 import { ref } from "vue";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 
-const { fetchAuthor, fetchPremise, fetchOutline, fetchFinalStory } =
+const { fetchAuthor, fetchPremise, fetchOutline, fetchStory, fetchEnding } =
   useStoryApi();
 
 const mainStore = useMainStore();
@@ -634,7 +661,7 @@ const isLoading = ref(false);
 const output = ref("");
 
 //api debug
-const debug = ref(true);
+const debug = ref(false);
 // If you want to limit access to this page to authenticated users only, uncomment the following line
 // definePageMeta({
 //   middleware: ["auth"],
@@ -812,6 +839,7 @@ const setPremise = (text: string) => {
   }, 2000);
 };
 const handleGeneratePremise = async () => {
+  console.log(storyStore.author, debug.value);
   premise.value = await fetchPremise(storyStore.author, debug.value);
   
 };
@@ -842,7 +870,7 @@ const setOutline = (text: string) => {
   storyStore.setOutline(text);
   isOutputLoading.value = true;
   updateOutline(text);
-  handleGenerateOutline();
+  handleGenerateStory();
   nextStep();
   setTimeout(() => {
     isOutputLoading.value = false;
@@ -893,52 +921,78 @@ const showContinueButton = ref(false);
 const storySoFar = ref("");
 const guidelines = ref("");
 const finalStory = ref(storyStore.finalStory || "");
-const endingStory = ref(false);
+const story = ref("");
+// const endingStory = ref(false);
 
 const handleGenerateStory = async () => {
-  endingStory.value = false;
-  storySoFar.value = await fetchFinalStory(
+  // endingStory.value = false;
+  // storySoFar.value = await fetchStory(
+  //   storyStore.author,
+  //   storyStore.premise,
+  //   storyStore.outline,
+  //   guidelines.value,
+  //   storySoFar.value,
+  //   debug.value
+  //   // endingStory.value,
+  // );
+  regenerateStory();
+};
+
+const regenerateEnding = async () => {
+  story.value = "";
+  isLoading.value = true;
+  story.value = await fetchEnding(
     storyStore.author,
     storyStore.premise,
     storyStore.outline,
     guidelines.value,
     storySoFar.value,
-    endingStory.value,
     debug.value
+    // endingStory.value,
   );
+  finalStory.value = storySoFar.value + story.value;
+  updateStory(finalStory.value);
+  // updateFinalStory(storySoFar.value);
+  isLoading.value = false;
+
 };
 
 const continueStory = async () => {
-  endingStory.value = false;
+  // endingStory.value = false;
 
   isLoading.value = true;
-  storySoFar.value = await fetchFinalStory(
+  finalStory.value = storySoFar.value + story.value; 
+  storySoFar.value = finalStory.value;
+  story.value = await fetchStory(
     storyStore.author,
     storyStore.premise,
     storyStore.outline,
     guidelines.value,
     storySoFar.value,
-    endingStory.value,
-
     debug.value
   );
+  finalStory.value = storySoFar.value + story.value; 
+  updateStory(finalStory.value);
   // updateFinalStory(storySoFar.value);
   isLoading.value = false;
 };
-const regenerateStory = async () => {
-  endingStory.value = false;
 
-  storySoFar.value = "";
+const regenerateStory = async () => {
+  // endingStory.value = false;
+
+  story.value = "";
   isLoading.value = true;
-  storySoFar.value = await fetchFinalStory(
+  story.value = await fetchStory(
     storyStore.author,
     storyStore.premise,
     storyStore.outline,
     guidelines.value,
     storySoFar.value,
-    endingStory.value,
     debug.value
+    // endingStory.value,
   );
+  finalStory.value = storySoFar.value + story.value;
+  updateStory(finalStory.value);
   // updateFinalStory(storySoFar.value);
   isLoading.value = false;
 };
@@ -964,20 +1018,38 @@ const updateFinalStory = (text: string) => {
     text +
     "</div>";
 };
+
+
+const updateStory = (text: string) => {
+  output.value =
+    '<h2 class="step-label ">Step 0: Author</h2>' +
+    "<div>" +
+    storyStore.author +
+    "</div>" +
+    '<span class="spacer"></span>' +
+    '<h2 class="step-label ">Step 1: Premise</h2>' +
+    "<div>" +
+    storyStore.premise +
+    "</div>" +
+    '<span class="spacer"></span>' +
+    '<h2 class="step-label ">Step 2: Outline</h2>' +
+    "<div>" +
+    storyStore.outline +
+    "</div>" +
+    '<span class="spacer"></span>' +
+    '<h2 class="story-label">Generated Story</h2>' +
+    "<div>" +
+    text +
+    "</div>";
+};
+
 const finishStory = async () => {
-  updateFinalStory(storySoFar.value);
-  endingStory.value = true;
+  // updateFinalStory(storySoFar.value);
+  // endingStory.value = true;
   isLoading.value = true;
-  storySoFar.value = await fetchFinalStory(
-    storyStore.author,
-    storyStore.premise,
-    storyStore.outline,
-    guidelines.value,
-    storySoFar.value,
-    endingStory.value,
-    debug.value
-  );
-  setFinalStory(storySoFar.value);
+  finalStory.value = storySoFar.value + story.value;
+  updateStory(finalStory.value);
+  setFinalStory(finalStory.value);
   // updateFinalStory(storySoFar.value);
   isLoading.value = false;
 };
