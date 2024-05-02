@@ -28,7 +28,7 @@
               >
                 <label for="genre" class="input-label">Choose a genre</label>
                 <div
-                  class="flex items-start content-start gap-2 self-stretch flex-wrap text-slate-50/80 py-1 px-1"
+                  class="flex items-start content-start gap-2 self-stretch flex-wrap text-slate-50/80 py-2 px-1"
                 >
                   <Pill
                     v-for="genre in genres"
@@ -68,7 +68,7 @@
                   >Choose a target audience</label
                 >
                 <div
-                  class="flex items-start content-start gap-2 self-stretch flex-wrap text-slate-50/80 py-1 px-1"
+                  class="flex items-start content-start gap-2 self-stretch flex-wrap text-slate-50/80 py-2 px-1"
                 >
                   <Pill
                     v-for="audience in audiences"
@@ -104,6 +104,7 @@
                 >
                   <button
                     class="flex h-10 justify-center items-center gap-2 bg-corporate-500 hover:bg-corporate-500/60 px-10 py-1.5 rounded-full"
+                    @click="generateAuthor"
                   >
                     <span
                       class="text-slate-300 text-xl font-normal uppercase"
@@ -142,7 +143,7 @@
                     id="text-prompt"
                     class="text-area"
                     placeholder="Choose a genre and an audience and click 'Generate Author'"
-                    v-model="storyStore.persona"
+                    v-model="persona"
                     :disabled="isLoading"
                   ></textarea>
                 </div>
@@ -156,7 +157,7 @@
                 <div class="flex items-start gap-2 self-stretch">
                   <button
                     class="btn flex h-14 justify-center items-center gap-2 flex-[1_0_0] bg-corporate-500 hover:bg-corporate-500/80 px-10 py-1.5 rounded-full"
-                    @click="nextStep"
+                    @click="setPersona(persona)"
                   >
                     <div class="flex flex-col justify-center items-center">
                       <span
@@ -284,7 +285,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-
 const mainStore = useMainStore();
 const storyStore = useStoryStore();
 const isLoggedIn = ref(true);
@@ -293,7 +293,11 @@ const isLoading = ref(false);
 // definePageMeta({
 //   middleware: ["auth"],
 // });
-const output = ref<string | undefined | null>("");
+const output =
+  (storyStore.persona +=
+  storyStore.premise +=
+  storyStore.outline +=
+    storyStore.finalStory || "");
 
 /**
  * Steps
@@ -317,21 +321,16 @@ const steps = [
     description:
       "Lorem ipsum dolor sit amet consectetur. Enim malesuada facilisi sed tortor sed vehicula. Duis.",
   },
+
   {
     index: 3,
-    title: "Compose your draft",
-    description:
-      "Lorem ipsum dolor sit amet consectetur. Enim malesuada facilisi sed tortor sed vehicula. Duis.",
-  },
-  {
-    index: 4,
     title: "Expand your story",
     description:
       "Lorem ipsum dolor sit amet consectetur. Enim malesuada facilisi sed tortor sed vehicula. Duis.",
   },
 ];
 const currentStep = ref(steps[0]);
-const totalSteps = steps.length;
+const totalSteps = steps.length - 1;
 
 const nextStep = () => {
   const nextIndex = currentStep.value.index + 1;
@@ -344,12 +343,15 @@ const backStep = () => {
   if (prevIndex >= 0) {
     currentStep.value = steps[prevIndex];
   }
-
 };
 /**
  * Step 0: Author
  */
-storyStore.setPersona("Persona Lorem ipsum dolor sit amet consectetur. Nulla vitae scelerisque dignissim a...");
+const persona = ref("");
+const setPersona = (text: string) => {
+  storyStore.setPersona(text);
+  nextStep();
+};
 //Genres
 const genres = ref([
   { text: "Adventure", color: "bg-indigo-400/80" },
@@ -413,6 +415,14 @@ const addCustomAudience = () => {
     customAudienceText.value = "";
   }
   isCustomAudience.value = false;
+};
+
+const generateAuthor = () => {
+  isLoading.value = true;
+  setTimeout(() => {
+    persona.value += selectedGenre.value += selectedAudience.value;
+    isLoading.value = false;
+  }, 2000);
 };
 
 /**
