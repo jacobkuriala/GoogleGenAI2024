@@ -1,6 +1,6 @@
 <template>
   <main
-    class="generate-output flex  h-full overflow-hidden justify-center items-center gap-2 border bg-black shadow-custom p-4 rounded-xl border-solid border-slate-500/30 relative"
+    class="generate-output flex h-full overflow-hidden justify-center items-center gap-2 border bg-black shadow-custom p-4 rounded-xl border-solid border-slate-500/30 relative"
   >
     <div
       class="output-placeholder flex flex-col items-center justify-center w-full h-full gap-12"
@@ -40,7 +40,7 @@
       </div>
     </div>
     <div
-      class="output w-full h-full flex flex-col gap-6 shrink-0 p-16 bg-corporate overflow-auto"
+      class="output w-full h-full flex flex-col gap-6 shrink-0 p-16 bg-corporate overflow-auto overflow-x-hidden"
       v-if="output"
       v-html="output"
     />
@@ -66,6 +66,18 @@ const props = defineProps<{
   @apply text-slate-400 text-base font-normal leading-6 mb-4;
 }
 .output {
-  @apply text-slate-400 text-base font-normal leading-6;
+  @apply text-slate-400 text-base font-normal leading-6 flex flex-col gap-4;
+}
+
+</style>
+<style lang="postcss">
+.output .step-label {
+  @apply self-stretch text-corporate-500 text-xl font-normal leading-8;
+}
+.output .story-label {
+  @apply self-stretch text-slate-400 text-xl font-normal leading-8;
+}
+.output .spacer {
+  @apply h-1 border-b border-dashed border-corporate-500 w-full my-4;
 }
 </style>

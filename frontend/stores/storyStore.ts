@@ -2,15 +2,15 @@ import { defineStore } from "pinia";
 
 export const useStoryStore = defineStore("story", {
   state: () => ({
-    persona:
+    author:
       "You are an award-winning science fiction author with a penchant for expansive, intricately woven stories. Your ultimate goal is to write the next award winning adventure story." as string,
     premise: null as string | null,
     outline: null as string | null,
     finalStory: null as string | null,
   }),
   actions: {
-    setPersona(persona: string) {
-      this.persona = persona;
+    setAuthor(author: string) {
+      this.author = author;
     },
     setPremise(premise: string) {
       this.premise = premise;
@@ -18,12 +18,11 @@ export const useStoryStore = defineStore("story", {
     setOutline(outline: string) {
       this.outline = outline;
     },
-
     setFinalStory(finalStory: string) {
       this.finalStory = finalStory;
     },
     resetStory() {
-      this.persona =
+      this.author =
         "You are an award-winning science fiction author with a penchant for expansive, intricately woven stories. Your ultimate goal is to write the next award winning adventure story.";
       this.premise = null;
       this.outline = null;
@@ -31,7 +30,7 @@ export const useStoryStore = defineStore("story", {
     },
   },
   getters: {
-    getPersona: (state) => state.persona,
+    getAuthor: (state) => state.author,
     getPremise: (state) => state.premise,
     getOutline: (state) => state.outline,
     getFinalStory: (state) => state.finalStory,
@@ -41,7 +40,7 @@ export const useStoryStore = defineStore("story", {
     isStoryComplete: (state) =>
       state.finalStory !== null && state.finalStory.includes("IAMDONE"),
     fullStoryState: (state) => ({
-      persona: state.persona,
+      author: state.author,
       premise: state.premise,
       outline: state.outline,
       finalStory: state.finalStory,

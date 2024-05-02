@@ -17,7 +17,12 @@ export default defineNuxtConfig({
       link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
     },
   },
+  build: {
+    transpile: ["@headlessui/vue"],
+  },
   modules: ["@nuxtjs/tailwindcss", "@nuxt/image", "@pinia/nuxt", "nuxt-icon"],
+
+  
   css: ["~/assets/css/fontface.css", "~/assets/css/main.css"],
   tailwindcss: {
     cssPath: ["~/assets/css/main.css", { injectPosition: "first" }],
