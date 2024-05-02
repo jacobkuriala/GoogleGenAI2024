@@ -103,4 +103,19 @@ app.post('/generatestory2', async (req, res) => {
     return req.body.storySoFar ? res.status(200).json({ story }) : res.status(200).json({ story, guideline });
 });
 
+
+// generate ending of the story
+app.post('/generateendingstory', async (req, res) => {
+    const { story, guideline } = await storyTeller2.generateEndingStory(
+        req.body.authorPrompt,
+        req.body.premisePrompt,
+        req.body.outlinePrompt,
+        req.body.guidelinePrompt,
+        req.body.storySoFar,
+        req.body.debug);
+    // if storySoFar exists then guideline exists in the FE. 
+    // Else we  return the end of the story.
+    return req.body.storySoFar ? res.status(200).json({ story }) : res.status(200).json({ story, guideline });
+});
+
 module.exports = app;
