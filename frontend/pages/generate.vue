@@ -1088,7 +1088,14 @@ const finishStep = () => {
  */
 const downloadStory = () => {
   console.log("Download story");
+  let file = new Blob([finalStory.value], {type: 'text/plain'});
+  let fileRoute = window.URL.createObjectURL(file);
+  let a = document.createElement('a');
+  a.setAttribute('href', fileRoute);
+  a.setAttribute('download', 'MyStory.txt');
+  a.click();
 };
+
 const shareStory = () => {
   console.log("Share story");
 };
@@ -1100,6 +1107,7 @@ const createNewStory = () => {
 
   navigateTo("/generate");
 };
+
 </script>
 
 <style lang="postcss" scoped>
