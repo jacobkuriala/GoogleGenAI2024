@@ -667,6 +667,7 @@ const generateAuthor = async () => {
     selectedGenre.value?.text || "",
     selectedAudience.value?.text || ""
   );
+  updateAuthor(author.value);
   // Here implement the logic to generate the author via AI
   console.log("Author generated", author.value);
   isLoading.value = false;
@@ -681,6 +682,16 @@ const regenerateAuthor = async () => {
   console.log("Author regenerated", author.value);
   isLoading.value = false;
 };
+
+const updateAuthor = (text: string) => {
+  output.value =
+    '<h2 class="step-label ">Step 0: Author</h2>' +
+    "<div>" +
+    text +
+    "</div>" +
+    '<span class="spacer"></span>';
+};
+
 const setAuthor = (text: string) => {
   storyStore.setAuthor(text);
   output.value =
@@ -726,9 +737,22 @@ const handleGeneratePremise = async () => {
 const regeneratePremise = async () => {
   isLoading.value = true;
   premise.value = await fetchPremise(storyStore.author, debug.value);
+  updatePremise(premise.value);
   isLoading.value = false;
 };
-
+const updatePremise = (text: string) => {
+  output.value =
+    '<h2 class="step-label ">Step 0: Author</h2>' +
+    "<div>" +
+    storyStore.author +
+    "</div>" +
+    '<span class="spacer"></span>' +
+    '<h2 class="step-label ">Step 1: Premise</h2>' +
+    "<div>" +
+    text +
+    "</div>" +
+    '<span class="spacer"></span>';
+};
 /**
  * Step 2: Outline
  */
@@ -758,7 +782,24 @@ const setOutline = (text: string) => {
     isOutputLoading.value = false;
   }, 2000);
 };
-
+const updateOutline = (text: string) => {
+  output.value =
+    '<h2 class="step-label ">Step 0: Author</h2>' +
+    "<div>" +
+    storyStore.author +
+    "</div>" +
+    '<span class="spacer"></span>' +
+    '<h2 class="step-label ">Step 1: Premise</h2>' +
+    "<div>" +
+    storyStore.premise +
+    "</div>" +
+    '<span class="spacer"></span>' +
+    '<h2 class="step-label ">Step 2: Outline</h2>' +
+    "<div>" +
+    text +
+    "</div>" +
+    '<span class="spacer"></span>';
+};
 const handleGenerateOutline = async () => {
   premise.value = await fetchOutline(
     storyStore.author,
@@ -773,6 +814,7 @@ const regenerateOutline = async () => {
     storyStore.premise,
     debug.value
   );
+  updateOutline(outline.value);
   isLoading.value = false;
 };
 

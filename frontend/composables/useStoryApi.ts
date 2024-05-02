@@ -3,7 +3,7 @@ export const useStoryApi = () => {
 
   const fetchAuthor = async (genre: string, audience: string) => {
     try {
-      const response = await fetch(`http://localhost:3002/api/generateauthor`, {
+      const response = await fetch(`http://localhost:3002/generateauthor`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -20,7 +20,7 @@ export const useStoryApi = () => {
 
   const fetchPremise = async (authorPrompt: string, debug: boolean) => {
     try {
-      const response = await fetch(`http://localhost:3002/api/generatepremise`, {
+      const response = await fetch(`http://localhost:3002/generatepremise`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ export const useStoryApi = () => {
 
   const fetchOutline = async (authorPrompt: string, premisePrompt: string, debug: boolean) => {
     try {
-      const response = await fetch(`http://localhost:3002/api/generateoutline`, {
+      const response = await fetch(`http://localhost:3002/generateoutline`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ export const useStoryApi = () => {
 
   const fetchFinalStory = async (authorPrompt: string, premisePrompt: string, outlinePrompt: string, guidelinePrompt: string, storySoFar: string, debug: boolean) => {
     try {
-      const response = await fetch(`http://localhost:3002/api/generatestory2`, {
+      const response = await fetch(`http://localhost:3002/generatestory2`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
