@@ -2,11 +2,11 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 require('dotenv').config();
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-latest" });
-// const model = genAI.getGenerativeModel({ model: "gemini-1.0-pro" });
+// const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-latest" });
+const model = genAI.getGenerativeModel({ model: "gemini-1.0-pro" });
 
 async function generatePersona(prompt) {
-    const personaPrompt = `Generate an author persona based on the following prompt: ${prompt}`
+    const personaPrompt = `Generate a persona based on the following prompt: ${prompt}`
     const response = await model.generateContent(personaPrompt);
     return response;
 }
