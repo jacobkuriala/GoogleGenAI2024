@@ -14,7 +14,7 @@ app.use(compression()); // compress all responses
 
 // set up authentication  routes
 const authRouter = require("./routes/authRouter");
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '100Mb' }));
 
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -61,7 +61,6 @@ app.get('/generatestory', async (req, res) => {
 });
 
 app.post('/generateauthor', async (req, res) => {
-    console.log('in generate audience');
     const authorPrompt = storyTeller2.generateAuthor(req.body.genre, req.body.audience);
     return res.status(200).json({ authorPrompt });
 });
@@ -82,15 +81,16 @@ app.post('/generateoutline', async (req, res) => {
 // creates new story if storySoFar = '' or not provided
 // if guidelinePrompt is not provided it uses a default guideline prompt
 app.post('/generatestory2', async (req, res) => {
-    console.log('in generate premise');
-    const story = await storyTeller2.generateStory(
+    const { story, guideline } = await storyTeller2.generateStory(
         req.body.authorPrompt,
         req.body.premisePrompt,
         req.body.outlinePrompt,
         req.body.guidelinePrompt,
         req.body.storySoFar,
         req.body.debug);
-    return res.status(200).json({ story });
+    // if storySoFar exists then guideline exists in the FE. 
+    // Else we return the initial guideline that we used to create the start of the story.
+    return req.body.storySoFar ? res.status(200).json({ story }) : res.status(200).json({ story, guideline });
 });
 
 module.exports = app;
