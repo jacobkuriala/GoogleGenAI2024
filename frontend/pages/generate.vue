@@ -1056,6 +1056,7 @@ const finishStory = async () => {
   setFinalStory(finalStory.value);
   // updateFinalStory(storySoFar.value);
   isLoading.value = false;
+  isEnding.value  = false;
 };
 
 
