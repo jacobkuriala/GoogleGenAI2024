@@ -448,12 +448,13 @@
                 class="flex flex-col items-center gap-2 self-stretch px-0 py-4"
               >
                 <button
-                  class="flex h-10 justify-center items-center gap-2 border border-solid bg-corporate-500 hover:bg-corporate-500/80 px-10 py-1.5 rounded-full text-slate-300"
+                  :class="{'flex h-10 justify-center items-center gap-2 border border-solid bg-corporate-500 hover:bg-corporate-500/80 px-10 py-1.5 rounded-full text-slate-300': !isEnding, 'flex h-10 justify-center items-center gap-2 bg-gray-600 px-10 py-1.5 rounded-full': isEnding}"
                   @click="continueStory"
-                >
+                  :disabled="isEnding"
+                  >
                   <span
-                    class="text-corporate-400 text-xl font-normal uppercase"
-                    v-if="!isLoading"
+                  :class="{'text-white text-xl font-normal uppercase': !isEnding, 'text-black text-xl font-normal uppercase': isEnding}"
+                  v-if="!isLoading"
                   >
                     Continue Story</span
                   >
@@ -478,17 +479,18 @@
                   </div>
                 </button>
                 <button
-                  class="flex h-10 justify-center items-center gap-2 border border-solid border-corporate-500 hover:bg-corporate-500/30 px-10 py-1.5 rounded-full"
+                  :class="{'flex h-10 justify-center items-center gap-2 border border-solid border-corporate-500 hover:bg-corporate-500/30 px-10 py-1.5 rounded-full': !isEnding, 'flex h-10 bg-gray-600 justify-center items-center gap-2 border border-solid border-gray-500 px-10 py-1.5 rounded-full': isEnding}"                  
                   @click="regenerateStory"
+                  :disabled="isEnding"
                 >
                   <Icon
                     name="heroicons:arrow-path-rounded-square-solid"
-                    class="w-6 h-6 text-corporate-500"
+                    :class="{'w-6 h-6 text-corporate-500': !isEnding, 'w-6 h-6 text-black': isEnding}"
                     v-if="!isLoading"
                   />
                   <span
-                    class="text-corporate-400 text-xl font-normal uppercase"
-                    v-if="!isLoading"
+                  :class="{'text-corporate-400 text-xl font-normal uppercase': !isEnding, 'text-black text-xl font-normal uppercase': isEnding}"                    
+                  v-if="!isLoading"
                   >
                     Regenerate Story</span
                   >
@@ -922,6 +924,7 @@ const storySoFar = ref("");
 const guidelines = ref("");
 const finalStory = ref(storyStore.finalStory || "");
 const story = ref("");
+const isEnding = ref(false)
 // const endingStory = ref(false);
 
 const handleGenerateStory = async () => {
@@ -939,6 +942,7 @@ const handleGenerateStory = async () => {
 };
 
 const regenerateEnding = async () => {
+  isEnding.value = true;
   story.value = "";
   isLoading.value = true;
   story.value = await fetchEnding(
