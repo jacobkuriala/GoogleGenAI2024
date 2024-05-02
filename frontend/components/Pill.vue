@@ -1,13 +1,12 @@
 <template>
   <button
     :class="[
-      `bg-${color}`,
-      `border-${color}`,
-      selected ? '!bg-slate-50 !border-slate-50 ring-1 ring-corporate-500' : 'bg-corporate-500',
+      color,
+      selected ? '!bg-slate-50 !border-slate-50 ring-4 ring-corporate-400' : '',
     ]"
-    class="w-fit flex items-start gap-2 px-2 py-0.5 rounded-full text-xs font-normal leading-4 hover:opacity-80 transition-opacity duration-150"
+    class="w-fit flex items-start gap-2 px-2 py-0.5 rounded-full text-base font-normal  hover:opacity-80 transition-opacity duration-150 bg-corporate-500"
   >
-    <span class="text-black/80">{{ text }}</span>
+    <span class="text-black/80 capitalize opacity-80">{{ text }}</span>
   </button>
 </template>
 
@@ -20,7 +19,7 @@ const props = withDefaults(
   }>(),
   {
     text: "Custom",
-    color: "corporate-500",
+    color: "bg-corporate-500",
     selected: false,
   }
 );

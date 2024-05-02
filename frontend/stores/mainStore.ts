@@ -10,6 +10,6 @@ export const useMainStore = defineStore("main", {
     },
   },
   getters: {
-    isAppLoaded: (state) => state.isAppLoaded, // Usa una función que retorna el estado
+    getAppLoaded: (state) => state.isAppLoaded, // Usa una función que retorna el estado
   },
 });
