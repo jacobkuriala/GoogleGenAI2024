@@ -512,6 +512,14 @@
                     <span class="sr-only">Loading...</span>
                   </div>
                 </button>
+                <button type="button" class="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 flex h-10 justify-center items-center gap-2 border border-solid px-10 py-1.5 rounded-full">
+                  <Icon
+                    name="heroicons:arrow-path-rounded-square-solid"
+                    class="w-6 h-6 text-corporate-500"
+                    v-if="!isLoading"
+                  />
+                  GENERATE ENDING
+                </button>
               </div>
             </main>
             <!-- form actions -->
@@ -601,6 +609,7 @@
                     Create new story
                   </span>
                 </button>
+
               </div>
             </main>
           </template>
@@ -753,9 +762,8 @@ const generateAuthor = async () => {
     selectedGenre.value?.text || "",
     selectedAudience.value?.text || ""
   );
-  // updateAuthor(author.value);
+  updateAuthor(author.value);
   // Here implement the logic to generate the author via AI
-  console.log("Author generated", author.value);
   isLoading.value = false;
 };
 
@@ -765,7 +773,6 @@ const regenerateAuthor = async () => {
     selectedGenre.value?.text || "",
     selectedAudience.value?.text || ""
   );
-  console.log("Author regenerated", author.value);
   // updateAuthor(author.value);
   isLoading.value = false;
 };
@@ -798,6 +805,7 @@ const setPremise = (text: string) => {
   updatePremise(text);
   handleGenerateOutline();
   isOutputLoading.value = true;
+  storyStore.setPremise(text);
   nextStep();
   setTimeout(() => {
     isOutputLoading.value = false;
@@ -805,11 +813,12 @@ const setPremise = (text: string) => {
 };
 const handleGeneratePremise = async () => {
   premise.value = await fetchPremise(storyStore.author, debug.value);
+  
 };
 const regeneratePremise = async () => {
   isLoading.value = true;
   premise.value = await fetchPremise(storyStore.author, debug.value);
-  // updatePremise(premise.value);
+  updatePremise(premise.value);
   isLoading.value = false;
 };
 const updatePremise = (text: string) => {
@@ -833,7 +842,7 @@ const setOutline = (text: string) => {
   storyStore.setOutline(text);
   isOutputLoading.value = true;
   updateOutline(text);
-  handleGenerateStory();
+  handleGenerateOutline();
   nextStep();
   setTimeout(() => {
     isOutputLoading.value = false;
@@ -858,7 +867,7 @@ const updateOutline = (text: string) => {
     '<span class="spacer"></span>';
 };
 const handleGenerateOutline = async () => {
-  premise.value = await fetchOutline(
+  outline.value = await fetchOutline(
     storyStore.author,
     storyStore.premise,
     debug.value
@@ -871,7 +880,7 @@ const regenerateOutline = async () => {
     storyStore.premise,
     debug.value
   );
-  // updateOutline(outline.value);
+  updateOutline(outline.value);
   isLoading.value = false;
 };
 

@@ -19,6 +19,7 @@ export const useStoryApi = () => {
   };
 
   const fetchPremise = async (authorPrompt: string, debug: boolean) => {
+    console.log('fetchPremise', authorPrompt, debug)
     try {
       const response = await fetch(`http://localhost:3002/generatepremise`, {
         method: 'POST',
