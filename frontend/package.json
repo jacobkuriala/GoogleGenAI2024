@@ -14,13 +14,17 @@
     "@nuxt/image": "^1.6.0",
     "@nuxtjs/tailwindcss": "^6.12.0",
     "@pinia/nuxt": "^0.5.1",
+    "@tresjs/cientos": "^3.8.0",
+    "@tresjs/nuxt": "^2.1.1",
     "nuxt": "^3.11.2",
     "pinia": "^2.1.7",
+    "three": "^0.164.1",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
     "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
+    "@types/three": "^0.164.0",
     "@pinia-plugin-persistedstate/nuxt": "^1.2.0",
     "nuxt-icon": "^0.6.10"
   }

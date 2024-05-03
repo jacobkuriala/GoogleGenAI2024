@@ -21,9 +21,7 @@ export default defineNuxtConfig({
   build: {
     transpile: ["@headlessui/vue"],
   },
-  modules: ["@nuxtjs/tailwindcss", "@nuxt/image", "@pinia/nuxt", "nuxt-icon",
-  '@pinia-plugin-persistedstate/nuxt',],
-
+  modules: ["@nuxtjs/tailwindcss", "@nuxt/image", "@pinia/nuxt", "nuxt-icon", '@tresjs/nuxt', '@pinia-plugin-persistedstate/nuxt'],
   
   css: ["~/assets/css/fontface.css", "~/assets/css/main.css"],
   tailwindcss: {
