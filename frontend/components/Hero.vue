@@ -13,15 +13,31 @@
         For example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
       </p>
     </div>
-    <NuxtImg
+    <!-- <NuxtImg
       src="/images/firecamp.png"
       format="auto"
       sizes="50vw sm:90vw md:60vw lg:50vw xl:40vw"
       class="absolute top-0 right-0 w-[43%]"
     />
+     -->
+     <section style="height: 100%; width: 500%;">
+      <TresCanvas clear-color="#0d1425">
+        <TresPerspectiveCamera />
+        <TresDirectionalLight v-light-helper />
+        <Suspense>
+          <FlameModel />
+        </Suspense>
+      </TresCanvas>
+    </section>
+
   </section>
 </template>
 
 <script setup lang="ts"></script>
 
-<style scoped></style>
+<style scoped>
+.hero {
+  background-color: #0d1425;
+}
+
+</style>
