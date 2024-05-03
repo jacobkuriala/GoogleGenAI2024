@@ -1,7 +1,10 @@
 # GoogleGenAI2024
+## Prerequisites
+You must install npm and node in order to run this project.
+
 ## How to  Run
-You will need to run 2 servers one for the backend and one for the frontend.
-Each are in their own folders (./frontend and ./backend) and have their respective readme.mds. Please follow the instructions within the respective readme's to install and run the projects.
+You must run 2 servers one for the backend and one for the frontend.
+Each are in their own folders (./frontend and ./backend) and have their respective readme.mds. Please follow the instructions within the respective readme's to install and run the servers and view the web application.
 
 ## Inspiration
 We created Campfire Storyteller because we understand that starting is often the hardest part of any creative process. This app is designed to help people unleash their imagination more freely and effectively. We believe in empowering storytellers by providing them with a powerful tool that helps them transition from the daunting blank page to a flourishing story, enriching the storytelling community.
