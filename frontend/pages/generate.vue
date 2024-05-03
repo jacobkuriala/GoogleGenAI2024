@@ -677,26 +677,26 @@ const steps = [
     index: 0,
     title: "Meet the author",
     description:
-      "Lorem ipsum dolor sit amet consectetur. Enim malesuada facilisi sed tortor sed vehicula. Duis.",
+      "Choose a genre and  audience and click on Generate Author. Tweak the author definition to your liking! Then click next to create a premise for your story.",
   },
   {
     index: 1,
     title: "Craft your premise",
     description:
-      "Lorem ipsum dolor sit amet consectetur. Enim malesuada facilisi sed tortor sed vehicula. Duis.",
+      "Use AI to generate a premise for your story. Regenerate your premise, and update it to your liking! Then click next to create an outline for your story.",
   },
   {
     index: 2,
     title: "Outline your story",
     description:
-      "Lorem ipsum dolor sit amet consectetur. Enim malesuada facilisi sed tortor sed vehicula. Duis.",
+      "Use AI to generate an outline for your story. Regenerate the story outline, and update it to your liking! Then click next to start creating the story!",
   },
 
   {
     index: 3,
     title: "Expand your story",
     description:
-      "Lorem ipsum dolor sit amet consectetur. Enim malesuada facilisi sed tortor sed vehicula. Duis.",
+      "This is a step by step process to creating the story. Update the story and click 'continue story' to generate the next part of your story. Change the guideline prompt to instruct AI during the creation process. Click 'regenerate story' to start over. Click 'regenerate ending' to coax the AI to generate an ending. Click 'finish story' when  you are done.",
   },
 ];
 const currentStep = ref(steps[0]);

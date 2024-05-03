@@ -5,7 +5,7 @@
     <div class="hero__copy col-span-8 flex flex-col gap-y-8">
       <div class="flex flex-col w-full gap-y-14">
         <h1 class="text-white font-work text-8xl font-bold leading-none">
-          Lorem ipsum dolor sit
+          Transform  your Imagination into Stories with AI
         </h1>
         <HeroInput placeholder="Do you want me to tell you a story?" />
       </div>

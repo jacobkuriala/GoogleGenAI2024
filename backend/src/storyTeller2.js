@@ -17,7 +17,7 @@ Remember, your main goal is to write an engaging story. If you get through
 the story too fast, that is bad. Expand, never summarize.`
 
 function generateAuthor(genre, audience) {
-    return `You are an award-winning science fiction author with a penchant for expansive, intricately woven stories. 
+    return `You are an award-winning author with a penchant for expansive, intricately woven stories. 
     Your ultimate goal is to write the next award winning story in the ${genre} genre. The story should be for a ${audience} audience.`;
 }
 
