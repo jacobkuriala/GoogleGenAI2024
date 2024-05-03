@@ -891,7 +891,7 @@ const updateOutline = (text: string) => {
     "</div>" +
     '<span class="spacer"></span>' +
     '<h2 class="step-label ">Step 2: Outline</h2>' +
-    "<div>" +
+    "<div style='white-space: pre-line'>" +
     text +
     "</div>" +
     '<span class="spacer"></span>';
@@ -1013,12 +1013,12 @@ const updateFinalStory = (text: string) => {
     "</div>" +
     '<span class="spacer"></span>' +
     '<h2 class="step-label ">Step 2: Outline</h2>' +
-    "<div>" +
+    "<div style='white-space: pre-line'>" +
     storyStore.outline +
     "</div>" +
     '<span class="spacer"></span>' +
     '<h2 class="story-label">Generated Story</h2>' +
-    "<div>" +
+    "<div style='white-space: pre-line'>" +
     text +
     "</div>";
 };
@@ -1037,12 +1037,12 @@ const updateStory = (text: string) => {
     "</div>" +
     '<span class="spacer"></span>' +
     '<h2 class="step-label ">Step 2: Outline</h2>' +
-    "<div>" +
+    "<div style='white-space: pre-line'>" +
     storyStore.outline +
     "</div>" +
     '<span class="spacer"></span>' +
     '<h2 class="story-label">Generated Story</h2>' +
-    "<div>" +
+    "<div style='white-space: pre-line'>" +
     text +
     "</div>";
 };
@@ -1078,7 +1078,7 @@ const finishStep = () => {
   // Reset the story Output
   output.value =
     '<h2 class="story-label">Generated Story</h2>' +
-    "<div>" +
+    "<div style='white-space: pre-line'>" +
     storyStore.finalStory +
     "</div>";
 };
