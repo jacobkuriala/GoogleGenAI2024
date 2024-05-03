@@ -3,7 +3,9 @@ const UserDao = require("../daos/UserDao");
 const jwt = require("jsonwebtoken");
 
 exports.postRegister = async (req, res, next) => {
-    const { fullname, email, password } = req.body;
+    const { email, password, full_name } = req.body;
+
+    console.log(full_name, email, password)
     try {
         const exsitUser = await UserDao.findUserByEmail(email);
         if (exsitUser) {
@@ -18,7 +20,7 @@ exports.postRegister = async (req, res, next) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
-        const result = await UserDao.createUser(fullname, email, hashedPassword);
+        const result = await UserDao.createUser(full_name, email, hashedPassword);
         res.status(200).json({
             message: "User created",
             user: { id: result._id, email: result.email },
@@ -67,7 +69,7 @@ exports.postLogout = async (req, res, next) => {
     UserDao.updateUserLoggedInStatus(user.email, false);
     res.status(200).json({
         user: {
-            fullname: user.fullname
+            full_name: user.full_name
         },
     });
 }
@@ -77,7 +79,7 @@ exports.getUser = async (req, res, next) => { // this function will send user da
     res.status(200).json({
         user: {
             id: user._id,
-            fullname: user.fullname,
+            full_name: user.full_name,
             email: user.email,
         },
     });

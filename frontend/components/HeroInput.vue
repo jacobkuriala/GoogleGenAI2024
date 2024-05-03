@@ -6,18 +6,23 @@
       type="text"
       class="bg-transparent w-full border-0 outline-none text-slate-400 text-2xl font-normal leading-normal whitespace-pre-nowrap"
       :placeholder="placeholder"
-      v-model='input'
+      v-model="input"
     />
     <HeroButton text="Generate" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref } from 'vue';
+import { defineProps, ref } from "vue";
+const mainStore = useMainStore();
 const props = defineProps<{
   placeholder?: string | "Placeholder";
 }>();
-const input = ref<string>('');
+// Utiliza computed para mantener el valor sincronizado con el store
+const input = computed({
+  get: () => mainStore.getStoryPrompt,
+  set: (value) => mainStore.setStoryPrompt(value),
+});
 </script>
 
 <style scoped></style>

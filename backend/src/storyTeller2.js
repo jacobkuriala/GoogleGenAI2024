@@ -45,7 +45,8 @@ async function generateOutline(authorPrompt, premisePrompt, debug = false) {
     return result.response.candidates[0].content.parts[0].text;
 }
 
-async function generateStory(authorPrompt, premisePrompt, outlinePrompt, guidelinePrompt = defaultGuideline, storySoFar = '', debug = false) {
+async function generateStory(authorPrompt, premisePrompt, outlinePrompt, guidelinePrompt, storySoFar = '', debug = false) {
+    if (guidelinePrompt === '' || guidelinePrompt === null) guidelinePrompt = defaultGuideline;
     if (debug) return testPrompts.story;
 
     const combinedPrompt = storySoFar === '' ? `${authorPrompt}
@@ -104,9 +105,48 @@ ${storySoFar}`;
     return { story: result.response.candidates[0].content.parts[0].text, guideline: guidelinePrompt };
 }
 
+async function generateEndingStory(authorPrompt, premisePrompt, outlinePrompt, guidelinePrompt, storySoFar = '', debug = false) {
+    if (guidelinePrompt === '' || guidelinePrompt === null) guidelinePrompt = defaultGuideline;
+
+    if (debug) return testPrompts.story;
+
+    const combinedPrompt = `${authorPrompt}
+
+You have a gripping premise in mind:
+
+${premisePrompt}
+
+Your imagination has crafted a rich narrative outline:
+
+${outlinePrompt}
+
+You've been writing this story, and now it's time to bring it to a close.
+
+First, silently review the outline and story so far. Identify what the single
+next part of your outline you should write.
+
+Your task is to continue where you left off and write the ending of the story.
+Your writing should be detailed enough that you are only scratching the surface of the next part of
+your outline. Try to write AT MINIMUM 1000 WORDS. Print the name of the chapter when a new chapter begins.
+Remember, do NOT write a whole chapter right now.
+
+If the story is becoming too long, feel free to summarize the events to reach a satisfying conclusion.
+
+${guidelinePrompt}
+
+Here's what you've written so far:
+
+${storySoFar}`;
+
+    const result = await api.generateContent(combinedPrompt);
+    console.log(combinedPrompt + '\n');
+    console.log(result);
+    return { story: result.response.candidates[0].content.parts[0].text, guideline: guidelinePrompt };
+}
 module.exports = {
     generateAuthor,
     generatePremise,
     generateOutline,
     generateStory,
+    generateEndingStory
 };

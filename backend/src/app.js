@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const { default: helmet } = require('helmet');
 const morgan = require('morgan');
 const storyTeller = require('./storyTeller');
+const cors = require('cors');
 const storyTeller2 = require('./storyTeller2');
 const app = express();
 
@@ -11,6 +12,7 @@ const app = express();
 app.use(morgan('dev'));
 app.use(helmet()); // hide crucial information
 app.use(compression()); // compress all responses
+app.use(cors({ origin: 'http://localhost:3000' }));
 
 // set up authentication  routes
 const authRouter = require("./routes/authRouter");
@@ -60,6 +62,14 @@ app.get('/generatestory', async (req, res) => {
     return res.status(200).json({ story });
 });
 
+app.post('/generatestorypost', async (req, res) => {
+    console.log(req.body);
+    const story = await storyTeller.generatestorywithparams(req.body.prompt, req.body.audience, req.body.genre);
+    console.log(story);
+    return res.status(200).json({ story });
+});
+
+
 app.post('/generateauthor', async (req, res) => {
     const authorPrompt = storyTeller2.generateAuthor(req.body.genre, req.body.audience);
     return res.status(200).json({ authorPrompt });
@@ -90,6 +100,21 @@ app.post('/generatestory2', async (req, res) => {
         req.body.debug);
     // if storySoFar exists then guideline exists in the FE. 
     // Else we return the initial guideline that we used to create the start of the story.
+    return req.body.storySoFar ? res.status(200).json({ story }) : res.status(200).json({ story, guideline });
+});
+
+
+// generate ending of the story
+app.post('/generateendingstory', async (req, res) => {
+    const { story, guideline } = await storyTeller2.generateEndingStory(
+        req.body.authorPrompt,
+        req.body.premisePrompt,
+        req.body.outlinePrompt,
+        req.body.guidelinePrompt,
+        req.body.storySoFar,
+        req.body.debug);
+    // if storySoFar exists then guideline exists in the FE. 
+    // Else we  return the end of the story.
     return req.body.storySoFar ? res.status(200).json({ story }) : res.status(200).json({ story, guideline });
 });
 

@@ -1,8 +1,8 @@
 const userModel = require("../models/userModel");
 
-async function createUser(fullname, email, hashedPassword) {
+async function createUser(full_name, email, hashedPassword) {
     const user = new userModel({
-        fullname: fullname,
+        full_name: full_name,
         email: email,
         password: hashedPassword,
     });
