@@ -62,7 +62,7 @@ export const useStoryApi = () => {
         body: JSON.stringify({ authorPrompt, premisePrompt, outlinePrompt, guidelinePrompt, storySoFar, debug }),
       });
       const data = await response.json();
-      return data.story; // Devuelve el valor en lugar de asignarlo
+      return data; // Devuelve el valor en lugar de asignarlo
     } catch (error) {
       console.error('Error fetching story:', error);
       return null; // Devuelve null en caso de error

@@ -967,7 +967,7 @@ const continueStory = async () => {
   isLoading.value = true;
   finalStory.value = storySoFar.value + story.value; 
   storySoFar.value = finalStory.value;
-  story.value = await fetchStory(
+  const response = await fetchStory(
     storyStore.author,
     storyStore.premise,
     storyStore.outline,
@@ -975,6 +975,7 @@ const continueStory = async () => {
     storySoFar.value,
     debug.value
   );
+  story.value = response.story;
   finalStory.value = storySoFar.value + story.value; 
   updateStory(finalStory.value);
   // updateFinalStory(storySoFar.value);
@@ -986,7 +987,7 @@ const regenerateStory = async () => {
 
   story.value = "";
   isLoading.value = true;
-  story.value = await fetchStory(
+  const response = await fetchStory(
     storyStore.author,
     storyStore.premise,
     storyStore.outline,
@@ -995,6 +996,9 @@ const regenerateStory = async () => {
     debug.value
     // endingStory.value,
   );
+  story.value = response.story;
+  guidelines.value = response.guideline;
+
   finalStory.value = storySoFar.value + story.value;
   updateStory(finalStory.value);
   // updateFinalStory(storySoFar.value);

@@ -45,7 +45,8 @@ async function generateOutline(authorPrompt, premisePrompt, debug = false) {
     return result.response.candidates[0].content.parts[0].text;
 }
 
-async function generateStory(authorPrompt, premisePrompt, outlinePrompt, guidelinePrompt = defaultGuideline, storySoFar = '', debug = false) {
+async function generateStory(authorPrompt, premisePrompt, outlinePrompt, guidelinePrompt, storySoFar = '', debug = false) {
+    if (guidelinePrompt === '' || guidelinePrompt === null) guidelinePrompt = defaultGuideline;
     if (debug) return testPrompts.story;
 
     const combinedPrompt = storySoFar === '' ? `${authorPrompt}
@@ -104,7 +105,9 @@ ${storySoFar}`;
     return { story: result.response.candidates[0].content.parts[0].text, guideline: guidelinePrompt };
 }
 
-async function generateEndingStory(authorPrompt, premisePrompt, outlinePrompt, guidelinePrompt = defaultGuideline, storySoFar = '', debug = false) {
+async function generateEndingStory(authorPrompt, premisePrompt, outlinePrompt, guidelinePrompt, storySoFar = '', debug = false) {
+    if (guidelinePrompt === '' || guidelinePrompt === null) guidelinePrompt = defaultGuideline;
+
     if (debug) return testPrompts.story;
 
     const combinedPrompt = `${authorPrompt}
