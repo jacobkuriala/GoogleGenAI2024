@@ -3,7 +3,9 @@ const UserDao = require("../daos/UserDao");
 const jwt = require("jsonwebtoken");
 
 exports.postRegister = async (req, res, next) => {
-    const { fullname, email, password } = req.body;
+    console.log('in post register', req.body);
+    const { full_name, email, password } = req.body;
+    console.log(req.body);
     try {
         const exsitUser = await UserDao.findUserByEmail(email);
         if (exsitUser) {
@@ -77,7 +79,7 @@ exports.getUser = async (req, res, next) => { // this function will send user da
     res.status(200).json({
         user: {
             id: user._id,
-            fullname: user.fullname,
+            full_name: user.full_name,
             email: user.email,
         },
     });
